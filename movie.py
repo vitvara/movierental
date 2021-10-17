@@ -1,11 +1,26 @@
+from enum import Enum
+class PriceCode(Enum):
+	# The types of movies (price_code). 
+	NEW_RELEASE = {"price": lambda days: 3*days, "frp": lambda days: days}
+	REGULAR = {"price": lambda days: 2 + 1.5*(days-2) if days > 2 else 2, "frp": lambda days: 2}
+	CHILDRENS = { "price": lambda days: 2 + 1.5*(days-2) if days > 2 else 2, "frp": lambda days: 1}
+
+	def price(self, days):
+		"Return the rental price for a given number of days"""
+		pricing = self.value["price"]    # the enum member's price formula
+		return pricing(days)
+
+	def freq(self, days):
+		"""Return the frequency"""
+		freqency = self.value["frp"]
+		return freqency(days)
+
+
+
 class Movie:
 	"""
 	A movie available for rent.
 	"""
-	# The types of movies (price_code). 
-	REGULAR = 0
-	NEW_RELEASE = 1
-	CHILDRENS = 2
 	
 	def __init__(self, title, price_code):
 		# Initialize a new movie. 
@@ -18,6 +33,6 @@ class Movie:
 	
 	def get_title(self):
 		return self.title
-	
+
 	def __str__(self):
 		return self.title
